@@ -20,5 +20,3 @@ This is a simple To-Do List app that allows users to:
 ## Requirements:
 - Python 3.x
 
-#Running a Task
-Screenshot ("C:\Users\AL REHMAN LAPTOP\Desktop\sssssssssss.png")
