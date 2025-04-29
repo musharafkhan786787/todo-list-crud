@@ -1,89 +1,93 @@
-todo_list = []
+class ToDoList:
+    def __init__(self):
+        self.todo_list = []
 
-while True:
-    print("--- To-Do List ---")
-    print("1. View tasks")
-    print("2. Add task")
-    print("3. Delete task")
-    print("4. Complete a task")
-    print("5. Update task")
-    print("6. Exit")
-
-    choice = input("Choose an option 1 to 6: ")
-
-    if choice == '1':
-        if not todo_list:
+    def view_tasks(self):
+        if not self.todo_list:
             print("No tasks found.")
         else:
-            counter = 1
-            for task in todo_list:
+            for i, task in enumerate(self.todo_list, 1):
                 status = "Completed" if task["completed"] else "Not completed"
-                print(f"{counter}. {task['Task']} - {status}")
-                counter += 1
+                print(i, "", task['Task'], "", status)
 
-    elif choice == '2':
+    def add_task(self):
         task = input("Enter a new task: ").strip()
         if task:
-            todo_list.append({"Task": task, "completed": False})
+            self.todo_list.append({"Task": task, "completed": False})
             print("Task added.")
         else:
-            print("No task added. Please enter a valid task.")
+            print("You added nothing.")
 
-    elif choice == '3':
-        if not todo_list:
-            print("No tasks to delete.")
-        else:
-            counter = 1
-            for task in todo_list:
-                status = "Completed" if task['completed'] else "Not completed"
-                print(f"{counter}. {task['Task']} - {status}")
-                counter += 1
-
+    def delete_task(self):
+        self.view_tasks()
+        if self.todo_list:
             try:
                 task_num = int(input("Enter the task number to delete: "))
-                if 1 <= task_num <= len(todo_list):
-                    removed = todo_list.pop(task_num - 1)
+                if 1 <= task_num <= len(self.todo_list):
+                    removed = self.todo_list.pop(task_num - 1)
                     print(f"Removed task: {removed['Task']}")
                 else:
                     print("Invalid task number.")
             except ValueError:
                 print("Please enter a valid number.")
 
-    elif choice == '4':
+    def complete_task(self):
         try:
             compl = int(input("Please enter the number of the task you completed: "))
-            if 1 <= compl <= len(todo_list):
-                todo_list[compl - 1]["completed"] = True
+            if 1 <= compl <= len(self.todo_list):
+                self.todo_list[compl - 1]["completed"] = True
                 print("The task is now marked as completed.")
             else:
-                print("Invalid task number.")
+                print("Invalid value.")
         except ValueError:
             print("Please enter a valid number.")
 
-    elif choice == '5':
-        if not todo_list:
-            print("No tasks to update.")
-        else:
-            counter = 1
-            for task in todo_list:
-                status = "Completed" if task['completed'] else "Not completed"
-                print(f"{counter}. {task['Task']} - {status}")
-                counter += 1
-
+    def update_task(self):
+        self.view_tasks()
+        if self.todo_list:
             try:
                 task_num = int(input("Enter the task number to update: "))
-                if 1 <= task_num <= len(todo_list):
-                    new_task = input("Enter the new task description: ")
-                    todo_list[task_num - 1]["Task"] = new_task
-                    print("Task updated successfully.")
+                if 1 <= task_num <= len(self.todo_list):
+                    new_task = input("Enter the new task description: ").strip()
+                    if new_task:
+                        self.todo_list[task_num - 1]["Task"] = new_task
+                        print("Task updated successfully.")
+                    else:
+                        print("Task description cannot be empty.")
                 else:
                     print("Invalid task number.")
             except ValueError:
                 print("Please enter a valid number.")
 
-    elif choice == '6':
-        print("Goodbye!")
-        break
+    def run(self):
+        while True:
+            print("\n--- To-Do List ---")
+            print("1. View tasks")
+            print("2. Add task")
+            print("3. Delete task")
+            print("4. Complete a task")
+            print("5. Update task")
+            print("6. Exit")
 
-    else:
-        print("Invalid choice. Please try again.")
+            choice = input("Choose an option (1 to 6): ")
+
+            if choice == '1':
+                self.view_tasks()
+            elif choice == '2':
+                self.add_task()
+            elif choice == '3':
+                self.delete_task()
+            elif choice == '4':
+                self.complete_task()
+            elif choice == '5':
+                self.update_task()
+            elif choice == '6':
+                print("Bye!")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+
+# Run the application
+if __name__ == "__main__":
+    todo = ToDoList()
+    todo.run()
