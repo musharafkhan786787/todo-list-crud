@@ -20,4 +20,6 @@ This is a simple To-Do List app that allows users to:
 ## Requirements:
 - Python 3.x
 
-Here is how
+Here is how your project look after running 
+
+!['Todo-list-project']("Runninginterface.png")
