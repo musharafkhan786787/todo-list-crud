@@ -1,18 +1,10 @@
-# todo_oop.py
-
 class Task:
     def __init__(self, description):
         self.description = description
         self.completed = False
 
-    def mark_completed(self):
-        self.completed = True
-
-    def update_description(self, new_description):
-        self.description = new_description
-
     def __str__(self):
-        status = "Completed" if self.completed else "Not completed"
+        status = "✅ Completed" if self.completed else "Not completed"
         return f"{self.description} - {status}"
 
 
@@ -20,99 +12,78 @@ class ToDoList:
     def __init__(self):
         self.tasks = []
 
-    def add_task(self, description):
-        task = Task(description)
-        self.tasks.append(task)
-        print("✅ Task added.")
+    def add(self, description):
+        self.tasks.append(Task(description))
 
-    def view_tasks(self):
+    def view(self):
         if not self.tasks:
             print("📭 No tasks found.")
         else:
-            print("\n📋 Task List:")
-            for idx, task in enumerate(self.tasks, start=1):
-                print(f"{idx}. {task}")
+            for i, task in enumerate(self.tasks, 1):
+                print(f"{i}. {task}")
 
-    def delete_task(self, task_number):
-        if 1 <= task_number <= len(self.tasks):
-            removed = self.tasks.pop(task_number - 1)
-            print(f"🗑️ Removed task: {removed.description}")
-        else:
-            print(" Invalid task number.")
+    def delete(self, number):
+        if self.valid(number):
+            print(f"🗑️ Removed: {self.tasks.pop(number - 1).description}")
 
-    def complete_task(self, task_number):
-        if 1 <= task_number <= len(self.tasks):
-            self.tasks[task_number - 1].mark_completed()
-            print("✅ Task marked as completed.")
-        else:
-            print(" Invalid task number.")
+    def complete(self, number):
+        if self.valid(number):
+            self.tasks[number - 1].completed = True
+            print("✅ Marked as completed.")
 
-    def update_task(self, task_number, new_description):
-        if 1 <= task_number <= len(self.tasks):
-            self.tasks[task_number - 1].update_description(new_description)
-            print(" Task updated successfully.")
-        else:
-            print(" Invalid task number.")
+    def update(self, number, new_desc):
+        if self.valid(number):
+            self.tasks[number - 1].description = new_desc
+            print(" Task updated.")
+
+    def valid(self, number):
+        if 1 <= number <= len(self.tasks):
+            return True
+        print(" Invalid task number.")
+        return False
 
 
 def main():
     todo = ToDoList()
 
     while True:
-        print("\n--- To-Do List Menu ---")
-        print("1. View tasks")
-        print("2. Add task")
-        print("3. Delete task")
-        print("4. Complete a task")
-        print("5. Update task")
+        print("\n--- To-Do List ---")
+        print("1. View tasks\n2. Add task")
+        if todo.tasks:
+            print("3. Delete task\n4. Complete task\n5. Update task")
         print("6. Exit")
 
-        choice = input("Choose an option (1 to 6): ")
+        choice = input("Choose an option: ")
 
         if choice == '1':
-            todo.view_tasks()
-
+            todo.view()
         elif choice == '2':
-            desc = input("Enter a new task: ").strip()
-            if desc:
-                todo.add_task(desc)
-            else:
-                print(" Empty task not added.")
-
-        elif choice == '3':
-            todo.view_tasks()
-            try:
-                number = int(input("Enter the task number to delete: "))
-                todo.delete_task(number)
-            except ValueError:
-                print(" Please enter a valid number.")
-
-        elif choice == '4':
-            todo.view_tasks()
-            try:
-                number = int(input("Enter the number of the task to complete: "))
-                todo.complete_task(number)
-            except ValueError:
-                print(" Please enter a valid number.")
-
-        elif choice == '5':
-            todo.view_tasks()
-            try:
-                number = int(input("Enter the task number to update: "))
-                new_desc = input("Enter the new task description: ").strip()
-                if new_desc:
-                    todo.update_task(number, new_desc)
-                else:
-                    print(" Task description cannot be empty.")
-            except ValueError:
-                print(" Please enter a valid number.")
-
+            desc = input("Enter task: ").strip()
+            if desc: todo.add(desc)
+        elif choice == '3' and todo.tasks:
+            todo.view()
+            todo.delete(input_number("Delete task number: "))
+        elif choice == '4' and todo.tasks:
+            todo.view()
+            todo.complete(input_number("Complete task number: "))
+        elif choice == '5' and todo.tasks:
+            todo.view()
+            num = input_number("Update task number: ")
+            new_desc = input("New description: ").strip()
+            if new_desc: todo.update(num, new_desc)
         elif choice == '6':
             print(" Goodbye!")
             break
-
         else:
-            print(" Invalid choice. Please try again.")
+            print(" Invalid choice.")
+
+
+def input_number(prompt):
+    try:
+        return int(input(prompt))
+    except ValueError:
+        print(" Please enter a valid number.")
+        return -1
 
 
 if __name__ == "__main__":
